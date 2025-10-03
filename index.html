@@ -432,12 +432,36 @@ const sample = document.getElementById('sample');
 let sampleStats = {paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
 
 function randomSample(){
-  const parts = [ "Mme°Dupont·organise·une·réunion↵RDV·à·14·h°30·→·Salle·B¶Merci·de·venir·avec·votre·PC¶",
+  // Liste de variantes possibles
+  const variants = [
+    "Mme°Dupont·organise·une·réunion↵RDV·à·14·h°30·→·Salle·B¶Merci·de·venir·avec·votre·PC¶",
     "RDV·à·9°h·15·→·Salle·A↵Liste·des·participants¶Merci·pour·votre·ponctualité¶",
     "Rapport·final·→·à·envoyer·avant·16°h·00↵Merci·de·relire·le·document¶",
     "Formation·Word·→·Salle·C↵Mme°Martin·sera·présente·à·10°h·45¶Merci·d’apporter·vos·notes¶"
-                ];
+  ];
+
+  // Choisir une variante au hasard
+  const chosen = variants[Math.floor(Math.random() * variants.length)];
+
+  // Réinitialiser le compteur
   sampleStats = {paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
+  const parts = [];
+
+  // Transformer la variante en HTML avec <span class="mark">
+  for(const ch of chosen){
+    if(ch==='·'){ parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; }
+    else if(ch==='°'){ parts.push('<span class="mark nbsp" draggable="false">°</span>'); sampleStats.nbsp++; }
+    else if(ch==='→'){ parts.push('<span class="mark tab" draggable="false">→</span>'); sampleStats.tab++; }
+    else if(ch==='¶'){ parts.push('<span class="mark paragraph" draggable="false">¶</span>'); sampleStats.paragraph++; }
+    else if(ch==='↵'){ parts.push('<span class="mark linebreak" draggable="false">↵</span>'); sampleStats.linebreak++; parts.push('<br>'); }
+    else { parts.push(ch); }
+  }
+
+  // Insérer dans #sample
+  sample.innerHTML = parts.join('');
+  sample.querySelectorAll('.mark').forEach(m=> m.setAttribute('draggable','false'));
+}
+
 
   function pushText(t){
     for(const ch of t){
