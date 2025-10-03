@@ -432,7 +432,11 @@ const sample = document.getElementById('sample');
 let sampleStats = {paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
 
 function randomSample(){
-  const parts = [];
+  const parts = [ "Mme°Dupont·organise·une·réunion↵RDV·à·14·h°30·→·Salle·B¶Merci·de·venir·avec·votre·PC¶",
+    "RDV·à·9°h·15·→·Salle·A↵Liste·des·participants¶Merci·pour·votre·ponctualité¶",
+    "Rapport·final·→·à·envoyer·avant·16°h·00↵Merci·de·relire·le·document¶",
+    "Formation·Word·→·Salle·C↵Mme°Martin·sera·présente·à·10°h·45¶Merci·d’apporter·vos·notes¶"
+                ];
   sampleStats = {paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
 
   function pushText(t){
