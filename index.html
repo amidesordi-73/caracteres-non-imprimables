@@ -107,13 +107,13 @@
       <div class="card">
         <h3>Texte à modifier</h3>
         <ol class="muted">
-          <li>Après « Titre de la note » : ¶</li>
-          <li>Après « Objectifs : » : ↵</li>
-          <li>Avant « • Préparer la salle » : →</li>
-          <li>Dans « RDV à 14 h 30 » : ° entre 14 et h</li>
-          <li>Dans « Merci! » : · avant !</li>
+          <li>Après « Titre de la note » : ¶ (<span class="kbd">Entrée</span>)</li>
+          <li>Après « Objectifs : » : ↵ (<span class="kbd">Shift</span>+<span class="kbd">Entrée</span>)</li>
+          <li>Avant « • Préparer la salle » : → (<span class="kbd">Tab</span>)</li>
+          <li>Dans « RDV à 14 h 30 » : ° entre 14 et h (<span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">Espace</span> / <span class="kbd">Alt</span>+<span class="kbd">Espace</span>)</li>
+          <li>Dans « Merci! » : · avant ! (<span class="kbd">Espace</span>)</li>
         </ol>
-        <div class="toolbar">
+        <div class="toolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
           <button class="btn secondary" id="reset2">Réinitialiser</button>
           <button class="btn secondary" id="example2">Exemple</button>
           <button class="btn" id="check2">Valider</button>
@@ -149,7 +149,7 @@
   </div>
 
   <footer>
-    <div>© Avenir Pro Formations — Mini-site pédagogique https://www.avenirpro-formations.com</div>
+    <div>© Avenir Pro Formations https://www.avenirpro-formations.com — Mini-site pédagogique</div>
     <div>https://www.amidesordi.com</div>
   </footer>
 </div>
@@ -196,31 +196,74 @@ document.getElementById('reset1').onclick=()=>{
   document.getElementById('result1').textContent='';
 };
 
-// EX2
+// EX2 — insertion des marques au clavier
 const editor=document.getElementById('editor');
 const result2=document.getElementById('result2');
-function reset2(){
+
+function loadInitialEx2(){
   editor.innerHTML="Titre de la note<br>Objectifs :<br>• Préparer la salle<br>RDV à 14 h 30<br>Merci!";
   result2.textContent='';
+  result2.removeAttribute('style');
 }
-reset2();
-document.getElementById('reset2').onclick=reset2;
+loadInitialEx2();
+
+function insertMark(markClass, char){
+  const span=document.createElement('span');
+  span.textContent=char;
+  span.className=`mark ${markClass}`;
+  span.dataset.kind=markClass;
+  span.setAttribute('draggable','false');
+  placeNodeAtCaret(span);
+}
+function placeNodeAtCaret(node){
+  const sel=window.getSelection();
+  if(!sel || !sel.rangeCount){ editor.appendChild(node); return; }
+  const range=sel.getRangeAt(0);
+  range.deleteContents();
+  range.insertNode(node);
+  range.setStartAfter(node);
+  range.setEndAfter(node);
+  sel.removeAllRanges(); sel.addRange(range);
+}
+
+// Interception clavier pour empêcher les vrais retours/espaces et insérer les symboles
+editor.addEventListener('keydown', (e)=>{
+  // Shift+Enter => ↵
+  if(e.key==='Enter' && e.shiftKey){ e.preventDefault(); insertMark('linebreak','↵'); return; }
+  // Enter => ¶
+  if(e.key==='Enter'){ e.preventDefault(); insertMark('paragraph','¶'); return; }
+  // Tab => →
+  if(e.key==='Tab'){ e.preventDefault(); insertMark('tab','→'); return; }
+  // NBSP => °
+  if( (e.ctrlKey && e.shiftKey && (e.code==='Space' || e.key===' ')) || (e.altKey && (e.code==='Space' || e.key===' ')) ){
+    e.preventDefault(); insertMark('nbsp','°'); return;
+  }
+  // Espace normal => ·
+  if(e.key===' '){ e.preventDefault(); insertMark('space','·'); return; }
+});
+
+// Boutons Ex2
+document.getElementById('reset2').onclick=loadInitialEx2;
 document.getElementById('example2').onclick=()=>{
-  editor.innerHTML='Titre de la note<span class="mark paragraph">¶</span><br>Objectifs :<span class="mark linebreak">↵</span><br><span class="mark tab">→</span>• Préparer la salle<br>RDV à 14 <span class="mark nbsp">°</span>h 30<br>Merci<span class="mark space">·</span>!';
+  editor.innerHTML='Titre de la note<span class="mark paragraph" data-kind="paragraph">¶</span><br>'+
+                   'Objectifs :<span class="mark linebreak" data-kind="linebreak">↵</span><br>'+
+                   '<span class="mark tab" data-kind="tab">→</span>• Préparer la salle<br>'+
+                   'RDV à 14 <span class="mark nbsp" data-kind="nbsp">°</span>h 30<br>'+
+                   'Merci<span class="mark space" data-kind="space">·</span>!';
 };
 document.getElementById('check2').onclick=()=>{
   const html=editor.innerHTML;
-  const ok1=/Titre.*paragraph/.test(html);
-  const ok2=/Objectifs.*linebreak/.test(html);
-  const ok3=/tab.*Préparer/.test(html);
-  const ok4=/14.*nbsp.*h 30/.test(html);
-  const ok5=/Merci.*space.*!/.test(html);
+  const ok1=/Titre[^<]*<span[^>]*class="mark paragraph"[^>]*>¶<\/span>/.test(html);
+  const ok2=/Objectifs[^<]*<span[^>]*class="mark linebreak"[^>]*>↵<\/span>/.test(html);
+  const ok3=/<span[^>]*class="mark tab"[^>]*>→<\/span>•\s*Préparer/.test(html);
+  const ok4=/14[^<]*<span[^>]*class="mark nbsp"[^>]*>°<\/span>\s*h 30/.test(html);
+  const ok5=/Merci[^<]*<span[^>]*class="mark space"[^>]*>·<\/span>!/.test(html);
   const ok=[ok1,ok2,ok3,ok4,ok5].filter(Boolean).length;
-  result2.textContent=ok===5?"Parfait (5/5)":`${ok}/5 correct`;
-  result2.style.color=ok===5?'var(--ok)':'var(--ko)';
+  result2.textContent = ok===5 ? "Parfait (5/5)" : `${ok}/5 correct`;
+  result2.style.color = ok===5 ? 'var(--ok)' : 'var(--ko)';
 };
 
-// EX3
+// EX3 (10 variantes, compteur, sans répétition)
 const sample=document.getElementById('sample');
 const info=document.getElementById('variantInfo');
 let sampleStats={paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
@@ -244,6 +287,7 @@ function randomSample(){
   usedVariants.push(idx);
   const chosen=variants[idx];
   info.textContent=`Variante ${usedVariants.length}/${variants.length}`;
+
   sampleStats={paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
   const parts=[];
   for(const ch of chosen){
@@ -258,6 +302,7 @@ function randomSample(){
 }
 document.getElementById('regen').onclick=()=>{randomSample();};
 randomSample();
+
 document.getElementById('check3').onclick=()=>{
   const ans={
     paragraph:+document.getElementById('q_paragraph').value||0,
