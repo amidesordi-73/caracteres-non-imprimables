@@ -6,46 +6,42 @@
   <title>Entraînement Word — Caractères non imprimables (¶)</title>
   <style>
     :root{
-      --bg:#0f172a;
-      --panel:#111827ee;
-      --ink:#e5e7eb;
-      --muted:#9ca3af;
-      --accent:#8b5cf6;
-      --accent-2:#22d3ee;
-      --ok:#10b981;
-      --ko:#ef4444;
-      --card:#1f2937;
+      --bg:#0f172a; --panel:#111827ee; --ink:#e5e7eb;
+      --muted:#9ca3af; --accent:#8b5cf6; --accent-2:#22d3ee;
+      --ok:#10b981; --ko:#ef4444; --card:#1f2937;
     }
     body{
       margin:0;
       background:radial-gradient(1200px 800px at 10% -10%, #1e293b, transparent),
                  radial-gradient(900px 600px at 110% 10%, #111827, transparent),
                  linear-gradient(180deg, #0b1020, #0b0f1a);
-      color:var(--ink);
-      font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      color:var(--ink); font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,sans-serif;
     }
     .container{max-width:1100px;margin:40px auto;padding:0 20px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
     .title{font-size:clamp(20px,3vw,36px);font-weight:800;}
     .badge{font-size:12px;color:#0b1020;background:linear-gradient(90deg,var(--accent),var(--accent-2));
       padding:6px 10px;border-radius:999px;font-weight:700}
     .panel{background:linear-gradient(180deg,var(--panel),#0b1220);
       border:1px solid #1f2a44;border-radius:18px;padding:20px}
     nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tab{background:#111827;border:1px solid #1f2a44;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer}
+    .tab{background:#111827;border:1px solid #1f2a44;color:var(--ink);
+      padding:10px 14px;border-radius:12px;cursor:pointer}
     .tab[aria-selected="true"]{outline:2px solid var(--accent);color:white}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .card{background:linear-gradient(180deg,var(--card),#111827);border:1px solid #1f2a44;border-radius:16px;padding:16px}
+    .card{background:linear-gradient(180deg,var(--card),#111827);
+      border:1px solid #1f2a44;border-radius:16px;padding:16px}
     .muted{color:var(--muted)}
     .drag{user-select:none;border:1px dashed #334155;color:#e2e8f0;border-radius:12px;
       padding:12px;font-size:24px;font-weight:800;background:#0b1220;cursor:grab}
     .drop,#dragPool{min-height:62px;border:1px dashed #334155;border-radius:12px;padding:10px;background:#0b1220}
-    .drop.hover,#dragPool.hover{outline:2px solid var(--accent)}
+    .drop.hover{outline:2px solid var(--accent)}
     .row{display:grid;grid-template-columns:1fr 220px;gap:10px;align-items:center}
     .btn{border:none;cursor:pointer;color:#0b1020;background:linear-gradient(90deg,var(--accent),var(--accent-2));
       padding:10px 14px;border-radius:12px;font-weight:800}
     .btn.secondary{background:transparent;color:var(--ink);border:1px solid #2b3656}
-    .kbd{font-family:monospace;background:#0b1220;border:1px solid #1f2a44;color:#e5e7eb;border-radius:8px;padding:2px 6px}
+    .kbd{font-family:monospace;background:#0b1220;border:1px solid #1f2a44;color:#e5e7eb;
+      border-radius:8px;padding:2px 6px}
     .result{font-weight:800}
     #editor{min-height:220px;max-height:320px;overflow:auto;border:2px dashed #374151;border-radius:14px;padding:12px;
       background:#0b1220;white-space:pre-wrap;word-break:break-word}
@@ -53,10 +49,12 @@
     .mark.paragraph{color:#f59e0b}.mark.linebreak{color:#22d3ee}.mark.tab{color:#60a5fa}
     .mark.space{color:#a78bfa}.mark.nbsp{color:#34d399}
     table{width:100%} th,td{padding:10px;border-bottom:1px solid #1f2a44;text-align:left}
-    th{color:#cbd5e1} input[type="number"]{background:#0b1220;border:1px solid #1f2a44;color:var(--ink);
+    th{color:#cbd5e1}
+    input[type="number"]{background:#0b1220;border:1px solid #1f2a44;color:var(--ink);
       border-radius:10px;padding:6px;width:100%}
     #sample{min-height:120px;max-height:280px;overflow:auto;padding:12px;border:1px solid #1f2a44;border-radius:12px;
-      background:#0b1220;line-height:1.6}
+      background:#0b1220;line-height:1.6;margin-top:10px}
+    #variantInfo{font-size:14px;color:var(--muted);margin-top:6px}
     footer{margin:26px 0 10px;color:#94a3b8;display:flex;justify-content:space-between;flex-wrap:wrap}
   </style>
 </head>
@@ -131,6 +129,7 @@
         <div class="card">
           <h3>Texte aléatoire</h3>
           <button class="btn secondary" id="regen">Nouveau texte</button>
+          <div id="variantInfo"></div>
           <div id="sample"></div>
         </div>
         <div class="card">
@@ -156,7 +155,7 @@
 </div>
 
 <script>
-// TABS
+// Tabs
 document.querySelectorAll('.tab').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected','false'));
@@ -223,7 +222,9 @@ document.getElementById('check2').onclick=()=>{
 
 // EX3
 const sample=document.getElementById('sample');
+const info=document.getElementById('variantInfo');
 let sampleStats={paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
+let usedVariants=[];
 function randomSample(){
   const variants=[
     "Mme°Dupont·organise·une·réunion↵RDV·à·14·h°30·→·Salle·B¶Merci·de·venir·avec·votre·PC¶",
@@ -237,7 +238,12 @@ function randomSample(){
     "Assemblée·générale↵Ouverture·à·18°h·00¶Clôture·prévue·vers·20°h·30¶",
     "Merci·de·ne·pas·oublier·vos·documents→Salle·Réunion¶Accueil·à·9°h·00¶"
   ];
-  const chosen=variants[Math.floor(Math.random()*variants.length)];
+  if(usedVariants.length===variants.length){usedVariants=[];} // reset après avoir tout vu
+  let idx;
+  do{ idx=Math.floor(Math.random()*variants.length);}while(usedVariants.includes(idx));
+  usedVariants.push(idx);
+  const chosen=variants[idx];
+  info.textContent=`Variante ${usedVariants.length}/${variants.length}`;
   sampleStats={paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
   const parts=[];
   for(const ch of chosen){
