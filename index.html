@@ -6,503 +6,269 @@
   <title>Entraînement Word — Caractères non imprimables (¶)</title>
   <style>
     :root{
-      --bg:#0f172a;        /* slate-900 */
-      --panel:#111827ee;   /* gray-900 */
-      --ink:#e5e7eb;       /* gray-200 */
-      --muted:#9ca3af;     /* gray-400 */
-      --accent:#8b5cf6;    /* violet-500 */
-      --accent-2:#22d3ee;  /* cyan-400 */
-      --ok:#10b981;        /* emerald */
-      --ko:#ef4444;        /* red */
-      --card:#1f2937;      /* gray-800 */
+      --bg:#0f172a;
+      --panel:#111827ee;
+      --ink:#e5e7eb;
+      --muted:#9ca3af;
+      --accent:#8b5cf6;
+      --accent-2:#22d3ee;
+      --ok:#10b981;
+      --ko:#ef4444;
+      --card:#1f2937;
     }
-    html,body{height:100%}
     body{
       margin:0;
-      background:
-        radial-gradient(1200px 800px at 10% -10%, #1e293b, transparent),
-        radial-gradient(900px 600px at 110% 10%, #111827, transparent),
-        linear-gradient(180deg, #0b1020, #0b0f1a);
+      background:radial-gradient(1200px 800px at 10% -10%, #1e293b, transparent),
+                 radial-gradient(900px 600px at 110% 10%, #111827, transparent),
+                 linear-gradient(180deg, #0b1020, #0b0f1a);
       color:var(--ink);
-      font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif
+      font:16px/1.5 system-ui,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
     }
     .container{max-width:1100px;margin:40px auto;padding:0 20px}
     header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
-    .title{font-size:clamp(20px,3vw,36px);font-weight:800;letter-spacing:.3px}
-    .badge{
-      font-size:12px;color:#0b1020;background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      padding:6px 10px;border-radius:999px;font-weight:700
-    }
-    .panel{
-      background:linear-gradient(180deg,var(--panel),#0b1220);
-      border:1px solid #1f2a44;box-shadow:0 10px 30px #0006;border-radius:18px;padding:20px
-    }
+    .title{font-size:clamp(20px,3vw,36px);font-weight:800;}
+    .badge{font-size:12px;color:#0b1020;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      padding:6px 10px;border-radius:999px;font-weight:700}
+    .panel{background:linear-gradient(180deg,var(--panel),#0b1220);
+      border:1px solid #1f2a44;border-radius:18px;padding:20px}
     nav.tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tab{
-      background:linear-gradient(180deg,#111827,#0b1220);
-      border:1px solid #1f2a44;color:var(--ink);
-      padding:10px 14px;border-radius:12px;cursor:pointer
-    }
+    .tab{background:#111827;border:1px solid #1f2a44;color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer}
     .tab[aria-selected="true"]{outline:2px solid var(--accent);color:white}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
     .card{background:linear-gradient(180deg,var(--card),#111827);border:1px solid #1f2a44;border-radius:16px;padding:16px}
     .muted{color:var(--muted)}
-
-    /* EX1 */
-    .symbols{display:flex;flex-wrap:wrap;gap:10px}
-    .drag{
-      user-select:none;border:1px dashed #334155;color:#e2e8f0;border-radius:12px;
-      padding:12px 14px;font-size:24px;font-weight:800;background:linear-gradient(180deg,#0b1220,#0e1628);cursor:grab
-    }
-    .drop, #dragPool{
-      min-height:62px;border:1px dashed #334155;border-radius:12px;padding:10px;
-      background:linear-gradient(180deg,#0b1220,#0d1424)
-    }
-    .drop.hover, #dragPool.hover{outline:2px solid var(--accent)}
+    .drag{user-select:none;border:1px dashed #334155;color:#e2e8f0;border-radius:12px;
+      padding:12px;font-size:24px;font-weight:800;background:#0b1220;cursor:grab}
+    .drop,#dragPool{min-height:62px;border:1px dashed #334155;border-radius:12px;padding:10px;background:#0b1220}
+    .drop.hover,#dragPool.hover{outline:2px solid var(--accent)}
     .row{display:grid;grid-template-columns:1fr 220px;gap:10px;align-items:center}
-    .btn{
-      appearance:none;border:none;cursor:pointer;color:#0b1020;background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      padding:10px 14px;border-radius:12px;font-weight:800
-    }
+    .btn{border:none;cursor:pointer;color:#0b1020;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      padding:10px 14px;border-radius:12px;font-weight:800}
     .btn.secondary{background:transparent;color:var(--ink);border:1px solid #2b3656}
-
-    /* EX2 */
-    .kbd{
-      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;background:#0b1220;border:1px solid #1f2a44;color:#e5e7eb;
-      border-radius:8px;padding:2px 6px;white-space:nowrap
-    }
+    .kbd{font-family:monospace;background:#0b1220;border:1px solid #1f2a44;color:#e5e7eb;border-radius:8px;padding:2px 6px}
     .result{font-weight:800}
-    #editor{
-      min-height:220px; max-height:320px; overflow:auto;
-      border:2px dashed #374151;border-radius:14px;padding:12px;
-      background:linear-gradient(180deg,#0b1220,#0d1424);
-      white-space:pre-wrap; word-break:break-word;
-    }
-    #editor:focus{outline:2px solid var(--accent)}
-    .mark{
-      font-weight:800;font-size:1em;line-height:1;display:inline-block;
-      pointer-events:none;user-select:none;cursor:default
-    }
-    .mark.paragraph{color:#f59e0b}   /* ¶ */
-    .mark.linebreak{color:#22d3ee}   /* ↵ */
-    .mark.tab{color:#60a5fa}         /* → */
-    .mark.space{color:#a78bfa}       /* · */
-    .mark.nbsp{color:#34d399}        /* ° */
-    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 0}
-    .switch{display:inline-flex;align-items:center;gap:8px}
-    .switch input{accent-color:var(--accent)}
-
-    /* EX3 */
-    table{width:100%;border-collapse:separate;border-spacing:0}
-    th,td{padding:10px;border-bottom:1px solid #1f2a44;text-align:left}
-    th{color:#cbd5e1;font-weight:700}
-    tbody tr:last-child td{border-bottom:none}
-    input[type="number"]{
-      background:#0b1220;border:1px solid #1f2a44;color:var(--ink);
-      border-radius:10px;padding:8px 10px;width:100%
-    }
-    #sample{
-      min-height:120px;max-height:280px;overflow:auto;padding:12px;border:1px solid #1f2a44;border-radius:12px;
-      background:linear-gradient(180deg,#0b1220,#0d1424);
-      white-space:normal;word-break:break-word;overflow-wrap:anywhere;line-height:1.8
-    }
-
-    footer{margin:26px 0 10px;color:#94a3b8;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    a{color:#7dd3fc}
+    #editor{min-height:220px;max-height:320px;overflow:auto;border:2px dashed #374151;border-radius:14px;padding:12px;
+      background:#0b1220;white-space:pre-wrap;word-break:break-word}
+    .mark{font-weight:800;font-size:1em;display:inline-block;pointer-events:none;user-select:none}
+    .mark.paragraph{color:#f59e0b}.mark.linebreak{color:#22d3ee}.mark.tab{color:#60a5fa}
+    .mark.space{color:#a78bfa}.mark.nbsp{color:#34d399}
+    table{width:100%} th,td{padding:10px;border-bottom:1px solid #1f2a44;text-align:left}
+    th{color:#cbd5e1} input[type="number"]{background:#0b1220;border:1px solid #1f2a44;color:var(--ink);
+      border-radius:10px;padding:6px;width:100%}
+    #sample{min-height:120px;max-height:280px;overflow:auto;padding:12px;border:1px solid #1f2a44;border-radius:12px;
+      background:#0b1220;line-height:1.6}
+    footer{margin:26px 0 10px;color:#94a3b8;display:flex;justify-content:space-between;flex-wrap:wrap}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div>
-        <div class="title">Entraînement — Caractères non imprimables Word <span aria-hidden>¶</span></div>
-        <div class="muted">Associer • Appliquer sur texte • Repérer </div>
-      </div>
-      <span class="badge">APF • Bureautique</span>
-    </header>
-
-    <div class="panel" role="region" aria-label="Zone d'exercices">
-      <nav class="tabs" role="tablist" aria-label="Exercices">
-        <button class="tab" role="tab" aria-selected="true" aria-controls="p1" id="t1">Exercice 1 : Associer</button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2">Exercice 2 : Appliquer</button>
-        <button class="tab" role="tab" aria-selected="false" aria-controls="p3" id="t3">Exercice 3 : Repérer</button>
-      </nav>
-
-      <!-- EX 1 -->
-      <section id="p1" role="tabpanel" aria-labelledby="t1" style="margin-top:16px">
-        <div class="grid">
-          <div class="card">
-            <h3>Symboles à glisser</h3>
-            <div class="symbols" id="dragPool" aria-label="Symboles à glisser">
-              <div class="drag" draggable="true" data-key="paragraph" title="Saut de paragraphe">¶</div>
-              <div class="drag" draggable="true" data-key="linebreak" title="Saut de ligne (Shift+Entrée)">↵</div>
-              <div class="drag" draggable="true" data-key="tab" title="Tabulation">→</div>
-              <div class="drag" draggable="true" data-key="space" title="Espace normal">·</div>
-              <div class="drag" draggable="true" data-key="nbsp" title="Espace insécable">°</div>
-            </div>
-          </div>
-          <div class="card">
-            <h3>Associer au bon nom</h3>
-            <div class="row"><div>1. Saut de paragraphe</div><div class="drop" data-accept="paragraph"></div></div>
-            <div class="row"><div>2. Saut de ligne</div><div class="drop" data-accept="linebreak"></div></div>
-            <div class="row"><div>3. Tabulation</div><div class="drop" data-accept="tab"></div></div>
-            <div class="row"><div>4. Espace normal</div><div class="drop" data-accept="space"></div></div>
-            <div class="row"><div>5. Espace insécable</div><div class="drop" data-accept="nbsp"></div></div>
-            <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-              <button class="btn" id="check1">Valider</button>
-              <button class="btn secondary" id="reset1">Réinitialiser</button>
-              <div id="result1" class="result" aria-live="polite"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- EX 2 -->
-      <section id="p2" role="tabpanel" aria-labelledby="t2" hidden style="margin-top:16px">
-        <div class="grid">
-          <div class="card">
-            <h3>Consignes</h3>
-            <ol class="muted" style="margin-top:8px">
-              <li>Après « <em>Titre de la note</em> » : insérer un <strong>¶</strong> (<span class="kbd">Entrée</span>).</li>
-              <li>Après « <em>Objectifs :</em> » : insérer un <strong>↵</strong> (<span class="kbd">Shift</span>+<span class="kbd">Entrée</span>).</li>
-              <li>Au début de « <em>• Préparer la salle</em> » : insérer un <strong>→</strong> (<span class="kbd">Tab</span>).</li>
-              <li>Dans « <em>RDV à 14 h 30</em> » : remplacer l’espace entre <em>14</em> et <em>h</em> par un <strong>°</strong> (NBSP).</li>
-              <li>Dans « <em>Merci!</em> » : insérer un <strong>·</strong> avant « ! ».</li>
-            </ol>
-            <div class="toolbar">
-              <label class="switch">
-                <input type="checkbox" id="toggleMarks" checked />
-                <span>Afficher les marques <span aria-hidden>¶</span></span>
-              </label>
-              <button class="btn secondary" id="reset2" title="Remettre le texte initial">Réinitialiser</button>
-              <button class="btn secondary" id="example2" title="Préremplir une solution correcte">Voir un exemple attendu</button>
-              <button class="btn" id="check2">Valider</button>
-              <div id="result2" class="result" aria-live="polite" style="margin-left:6px"></div>
-            </div>
-          </div>
-
-          <div class="card">
-            <h3>Texte à modifier</h3>
-            <p class="muted" style="margin-top:-4px">Cliquez dans la zone et appliquez les actions demandées. Le texte ne déborde pas du cadre (défilement si nécessaire).</p>
-            <div id="editor" contenteditable="true" aria-label="Zone de saisie pour les marques" spellcheck="false"></div>
-            <p class="muted" style="margin-top:10px">
-              Raccourcis : <span class="kbd">Entrée</span>=¶ • <span class="kbd">Shift</span>+<span class="kbd">Entrée</span>=↵ •
-              <span class="kbd">Tab</span>=→ • <span class="kbd">Espace</span>=· •
-              <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">Espace</span> (Win) / <span class="kbd">⌥</span>+<span class="kbd">Espace</span> (Mac)=°
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- EX 3 -->
-      <section id="p3" role="tabpanel" aria-labelledby="t3" hidden style="margin-top:16px">
-        <div class="grid">
-          <div class="card">
-            <h3>Repérer dans un texte : combien de caractères sont présent dans le texte ?</h3>
-            <p class="muted">Afficher/masquer les marques puis répondez.</p>
-            <div class="toolbar" style="margin-bottom:10px">
-              <button class="btn" id="toggleSample">Afficher/masquer ¶</button>
-              <button class="btn secondary" id="regen">Nouveau texte</button>
-            </div>
-            <div id="sample" class="card"></div>
-          </div>
-          <div class="card">
-            <h3>Questions</h3>
-            <table>
-              <tbody>
-                <tr><th>Paragraphe (¶)</th><td><input type="number" id="q_paragraph" min="0"></td></tr>
-                <tr><th>Saut de ligne (↵)</th><td><input type="number" id="q_linebreak" min="0"></td></tr>
-                <tr><th>Tabulation (→)</th><td><input type="number" id="q_tab" min="0"></td></tr>
-                <tr><th>Espace normal (·)</th><td><input type="number" id="q_space" min="0"></td></tr>
-                <tr><th>Espace insécable (°)</th><td><input type="number" id="q_nbsp" min="0"></td></tr>
-              </tbody>
-            </table>
-            <div style="display:flex;gap:10px;margin-top:12px">
-              <button class="btn" id="check3">Valider</button>
-              <button class="btn secondary" id="reset3">Réinitialiser</button>
-              <div id="result3" class="result" aria-live="polite"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+<div class="container">
+  <header>
+    <div>
+      <div class="title">Entraînement — Caractères non imprimables Word <span aria-hidden>¶</span></div>
+      <div class="muted">Associer • Appliquer • Repérer</div>
     </div>
+    <span class="badge">APF • Bureautique</span>
+  </header>
 
-    <footer>
-      <div>© Avenir Pro Formations — Mini-site pédagogique.</div>
-      <div>www.amidesordi.com</div>
-    </footer>
+  <div class="panel">
+    <nav class="tabs">
+      <button class="tab" aria-selected="true" aria-controls="p1">Exercice 1 : Associer</button>
+      <button class="tab" aria-selected="false" aria-controls="p2">Exercice 2 : Appliquer</button>
+      <button class="tab" aria-selected="false" aria-controls="p3">Exercice 3 : Repérer</button>
+    </nav>
+
+    <!-- EX1 -->
+    <section id="p1" style="margin-top:16px">
+      <div class="grid">
+        <div class="card">
+          <h3>Symboles</h3>
+          <div id="dragPool">
+            <div class="drag" draggable="true" data-key="paragraph">¶</div>
+            <div class="drag" draggable="true" data-key="linebreak">↵</div>
+            <div class="drag" draggable="true" data-key="tab">→</div>
+            <div class="drag" draggable="true" data-key="space">·</div>
+            <div class="drag" draggable="true" data-key="nbsp">°</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Associer</h3>
+          <div class="row"><div>Saut de paragraphe</div><div class="drop" data-accept="paragraph"></div></div>
+          <div class="row"><div>Saut de ligne</div><div class="drop" data-accept="linebreak"></div></div>
+          <div class="row"><div>Tabulation</div><div class="drop" data-accept="tab"></div></div>
+          <div class="row"><div>Espace normal</div><div class="drop" data-accept="space"></div></div>
+          <div class="row"><div>Espace insécable</div><div class="drop" data-accept="nbsp"></div></div>
+          <button class="btn" id="check1">Valider</button>
+          <button class="btn secondary" id="reset1">Réinitialiser</button>
+          <div id="result1" class="result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EX2 -->
+    <section id="p2" hidden style="margin-top:16px">
+      <div class="card">
+        <h3>Texte à modifier</h3>
+        <ol class="muted">
+          <li>Après « Titre de la note » : ¶</li>
+          <li>Après « Objectifs : » : ↵</li>
+          <li>Avant « • Préparer la salle » : →</li>
+          <li>Dans « RDV à 14 h 30 » : ° entre 14 et h</li>
+          <li>Dans « Merci! » : · avant !</li>
+        </ol>
+        <div class="toolbar">
+          <button class="btn secondary" id="reset2">Réinitialiser</button>
+          <button class="btn secondary" id="example2">Exemple</button>
+          <button class="btn" id="check2">Valider</button>
+          <div id="result2" class="result"></div>
+        </div>
+        <div id="editor" contenteditable="true"></div>
+      </div>
+    </section>
+
+    <!-- EX3 -->
+    <section id="p3" hidden style="margin-top:16px">
+      <div class="grid">
+        <div class="card">
+          <h3>Texte aléatoire</h3>
+          <button class="btn secondary" id="regen">Nouveau texte</button>
+          <div id="sample"></div>
+        </div>
+        <div class="card">
+          <h3>Questions</h3>
+          <table>
+            <tr><td>¶</td><td><input type="number" id="q_paragraph"></td></tr>
+            <tr><td>↵</td><td><input type="number" id="q_linebreak"></td></tr>
+            <tr><td>→</td><td><input type="number" id="q_tab"></td></tr>
+            <tr><td>·</td><td><input type="number" id="q_space"></td></tr>
+            <tr><td>°</td><td><input type="number" id="q_nbsp"></td></tr>
+          </table>
+          <button class="btn" id="check3">Valider</button>
+          <div id="result3" class="result"></div>
+        </div>
+      </div>
+    </section>
   </div>
 
+  <footer>
+    <div>© Avenir Pro Formations — Mini-site pédagogique</div>
+    <div>www.amidesordi.com</div>
+  </footer>
+</div>
+
 <script>
-// —————————————— TABS
-const tabs = document.querySelectorAll('.tab');
-const panels = [...document.querySelectorAll('[role="tabpanel"]')];
-for (const tab of tabs){
-  tab.addEventListener('click', ()=>{
-    tabs.forEach(t=>t.setAttribute('aria-selected','false'));
-    panels.forEach(p=>p.hidden = true);
-    tab.setAttribute('aria-selected','true');
-    document.getElementById(tab.getAttribute('aria-controls')).hidden = false;
+// TABS
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected','false'));
+    document.querySelectorAll('section').forEach(p=>p.hidden=true);
+    btn.setAttribute('aria-selected','true');
+    document.getElementById(btn.getAttribute('aria-controls')).hidden=false;
   });
-}
+});
 
-// —————————————— EX 1: DRAG & DROP (fonctionnel)
-const pool = document.getElementById('dragPool');
-const drags = () => document.querySelectorAll('.drag'); // live
-const drops = document.querySelectorAll('.drop');
-
-function onDragStart(e){
-  const el = e.currentTarget;
-  e.dataTransfer.setData('text/plain', el.dataset.key);
-  el.style.opacity = .6;
-}
-function onDragEnd(e){
-  e.currentTarget.style.opacity = 1;
-}
+// EX1
+const pool=document.getElementById('dragPool');
+const drops=document.querySelectorAll('.drop');
 function makeDroppable(zone){
-  zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('hover'); });
-  zone.addEventListener('dragleave', ()=> zone.classList.remove('hover'));
+  zone.addEventListener('dragover', e=>{e.preventDefault(); zone.classList.add('hover')});
+  zone.addEventListener('dragleave', ()=>zone.classList.remove('hover'));
   zone.addEventListener('drop', e=>{
-    e.preventDefault();
-    zone.classList.remove('hover');
-    const key = e.dataTransfer.getData('text/plain');
-    if(!key) return;
-    const node = document.querySelector(`.drag[data-key="${key}"]`);
-    if(!node) return;
-    if(zone !== pool){ zone.innerHTML = ''; }
-    zone.appendChild(node);
+    e.preventDefault(); zone.classList.remove('hover');
+    const key=e.dataTransfer.getData('text/plain');
+    const el=document.querySelector(`.drag[data-key="${key}"]`);
+    if(!el) return;
+    if(zone!==pool) zone.innerHTML='';
+    zone.appendChild(el);
   });
 }
-function armDragHandlers(){
-  drags().forEach(d=>{
-    d.removeEventListener('dragstart', onDragStart);
-    d.removeEventListener('dragend', onDragEnd);
-    d.addEventListener('dragstart', onDragStart);
-    d.addEventListener('dragend', onDragEnd);
-  });
-}
-armDragHandlers();
-makeDroppable(pool);
-drops.forEach(makeDroppable);
-
-document.getElementById('check1').addEventListener('click', ()=>{
-  let ok = 0; const total = drops.length;
-  drops.forEach(z=>{
-    const child = z.querySelector('.drag');
-    if(child && child.dataset.key === z.dataset.accept){ ok++; }
-  });
-  const r = document.getElementById('result1');
-  r.textContent = ok===total? `Parfait ! (${ok}/${total})` : `Encore ${total-ok} à corriger… (${ok}/${total})`;
-  r.style.color = ok===total? 'var(--ok)' : 'var(--ko)';
+document.querySelectorAll('.drag').forEach(d=>{
+  d.addEventListener('dragstart', e=>{e.dataTransfer.setData('text/plain', d.dataset.key); d.style.opacity=.6});
+  d.addEventListener('dragend', ()=>d.style.opacity=1);
 });
-document.getElementById('reset1').addEventListener('click', ()=>{
-  drops.forEach(z=>{
-    const child = z.querySelector('.drag');
-    if(child) pool.appendChild(child);
-    z.innerHTML = '';
-  });
-  document.getElementById('result1').textContent = '';
-});
+makeDroppable(pool); drops.forEach(makeDroppable);
+document.getElementById('check1').onclick=()=>{
+  let ok=0; drops.forEach(z=>{const c=z.querySelector('.drag'); if(c&&c.dataset.key===z.dataset.accept) ok++});
+  const r=document.getElementById('result1');
+  r.textContent=ok===drops.length?`Parfait (${ok}/5)`:`Encore ${5-ok} à corriger (${ok}/5)`;
+  r.style.color=ok===drops.length?'var(--ok)':'var(--ko)';
+};
+document.getElementById('reset1').onclick=()=>{
+  drops.forEach(z=>{const c=z.querySelector('.drag'); if(c) pool.appendChild(c); z.innerHTML=''});
+  document.getElementById('result1').textContent='';
+};
 
-// —————————————— EX 2: TEXTE EXISTANT + MARQUES + EXEMPLE + VALIDATION DOM
-const editor = document.getElementById('editor');
-const toggleMarks = document.getElementById('toggleMarks');
-const result2 = document.getElementById('result2');
+// EX2
+const editor=document.getElementById('editor');
+const result2=document.getElementById('result2');
+function reset2(){
+  editor.innerHTML="Titre de la note<br>Objectifs :<br>• Préparer la salle<br>RDV à 14 h 30<br>Merci!";
+  result2.textContent='';
+}
+reset2();
+document.getElementById('reset2').onclick=reset2;
+document.getElementById('example2').onclick=()=>{
+  editor.innerHTML='Titre de la note<span class="mark paragraph">¶</span><br>Objectifs :<span class="mark linebreak">↵</span><br><span class="mark tab">→</span>• Préparer la salle<br>RDV à 14 <span class="mark nbsp">°</span>h 30<br>Merci<span class="mark space">·</span>!';
+};
+document.getElementById('check2').onclick=()=>{
+  const html=editor.innerHTML;
+  const ok1=/Titre.*paragraph/.test(html);
+  const ok2=/Objectifs.*linebreak/.test(html);
+  const ok3=/tab.*Préparer/.test(html);
+  const ok4=/14.*nbsp.*h 30/.test(html);
+  const ok5=/Merci.*space.*!/.test(html);
+  const ok=[ok1,ok2,ok3,ok4,ok5].filter(Boolean).length;
+  result2.textContent=ok===5?"Parfait (5/5)":`${ok}/5 correct`;
+  result2.style.color=ok===5?'var(--ok)':'var(--ko)';
+};
 
-function loadInitialEx2(){
-  editor.innerHTML = '';
-  editor.append(document.createTextNode('Titre de la note'));
-  editor.append(document.createElement('br'));
-  editor.append(document.createTextNode('Objectifs :'));
-  editor.append(document.createElement('br'));
-  editor.append(document.createTextNode('• Préparer la salle'));
-  editor.append(document.createElement('br'));
-  editor.append(document.createTextNode('RDV à 14 h 30'));
-  editor.append(document.createElement('br'));
-  editor.append(document.createTextNode('Merci!'));
-  result2.textContent = '';
-  result2.removeAttribute('style');
-}
-loadInitialEx2();
-
-function insertMark(markClass, char){
-  const span = document.createElement('span');
-  span.textContent = char;
-  span.className = `mark ${markClass}`;
-  span.dataset.kind = markClass;
-  span.setAttribute('draggable','false');
-  placeNodeAtCaret(span);
-}
-function placeNodeAtCaret(node){
-  const sel = window.getSelection();
-  if(!sel || !sel.rangeCount){ editor.appendChild(node); return; }
-  const range = sel.getRangeAt(0);
-  range.deleteContents();
-  range.insertNode(node);
-  range.setStartAfter(node);
-  range.setEndAfter(node);
-  sel.removeAllRanges(); sel.addRange(range);
-}
-editor.addEventListener('keydown', (e)=>{
-  if(e.key === 'Enter' && e.shiftKey){ e.preventDefault(); insertMark('linebreak','↵'); return; }
-  if(e.key === 'Enter'){ e.preventDefault(); insertMark('paragraph','¶'); return; }
-  if(e.key === 'Tab'){ e.preventDefault(); insertMark('tab','→'); return; }
-  if( (e.ctrlKey && e.shiftKey && (e.code==='Space' || e.key===' ')) || (e.altKey && (e.code==='Space' || e.key===' ')) ){
-    e.preventDefault(); insertMark('nbsp','°'); return;
-  }
-  if(e.key === ' '){ e.preventDefault(); insertMark('space','·'); return; }
-});
-function setMarksVisible(on){
-  editor.querySelectorAll('.mark').forEach(m=>{ m.style.opacity = on? '1':'0'; });
-}
-toggleMarks.addEventListener('change', ()=> setMarksVisible(toggleMarks.checked));
-document.getElementById('reset2').addEventListener('click', loadInitialEx2);
-document.getElementById('example2').addEventListener('click', ()=>{
-  editor.innerHTML =
-    'Titre de la note<span class="mark paragraph" data-kind="paragraph">¶</span><br>' +
-    'Objectifs :<span class="mark linebreak" data-kind="linebreak">↵</span><br>' +
-    '<span class="mark tab" data-kind="tab">→</span>• Préparer la salle<br>' +
-    'RDV à 14 <span class="mark nbsp" data-kind="nbsp">°</span>h 30<br>' +
-    'Merci<span class="mark space" data-kind="space">·</span>!';
-  setMarksVisible(document.getElementById('toggleMarks').checked);
-  result2.textContent = 'Exemple chargé — essayez “Valider”.';
-  result2.style.color = '#9ca3af';
-});
-function getSegmentsFromEditor() {
-  const seg = [];
-  function pushText(txt) { if (txt) seg.push({ type: 'text', text: txt }); }
-  function walk(node) {
-    if (node.nodeType === Node.TEXT_NODE) { pushText(node.nodeValue || ''); return; }
-    if (node.nodeType === Node.ELEMENT_NODE) {
-      const tag = node.tagName;
-      if (tag === 'BR') { seg.push({ type: 'br' }); return; }
-      if (tag === 'SPAN' && node.classList.contains('mark')) {
-        const kind = node.dataset.kind ||
-          (node.classList.contains('paragraph') ? 'paragraph' :
-           node.classList.contains('linebreak') ? 'linebreak' :
-           node.classList.contains('tab') ? 'tab' :
-           node.classList.contains('space') ? 'space' :
-           node.classList.contains('nbsp') ? 'nbsp' : '');
-        seg.push({ type: 'mark', kind }); return;
-      }
-      for (const c of node.childNodes) walk(c);
-    }
-  }
-  for (const n of editor.childNodes) walk(n);
-  return seg;
-}
-function nextNonEmptyIndex(seg, startIdx) {
-  for (let i = startIdx + 1; i < seg.length; i++) {
-    const s = seg[i]; if (s.type === 'text' && s.text.trim() === '') continue; return i;
-  } return -1;
-}
-function textAt(seg, idx) { return (seg[idx] && seg[idx].type === 'text') ? seg[idx].text : ''; }
-function findTextIndex(seg, needle) {
-  const n = needle.toLowerCase();
-  for (let i = 0; i < seg.length; i++) if (seg[i].type === 'text' && seg[i].text.toLowerCase().includes(n)) return i;
-  return -1;
-}
-function findLineStartIndexes(seg) { const idxs = [-1]; for (let i = 0; i < seg.length; i++) if (seg[i].type === 'br') idxs.push(i); return idxs; }
-document.getElementById('check2').addEventListener('click', ()=>{
-  const seg = getSegmentsFromEditor();
-  let iTitre = findTextIndex(seg, 'Titre de la note'); let ok1 = false;
-  if (iTitre !== -1) for (let i = iTitre + 1; i < seg.length; i++) { if (seg[i].type === 'br') break; if (seg[i].type === 'mark' && seg[i].kind === 'paragraph'){ ok1 = true; break; } }
-  let iObj = findTextIndex(seg, 'Objectifs :'); let ok2 = false;
-  if (iObj !== -1) for (let i = iObj + 1; i < seg.length; i++) { if (seg[i].type === 'br') break; if (seg[i].type === 'mark' && seg[i].kind === 'linebreak'){ ok2 = true; break; } }
-  let ok3 = false; const starts = findLineStartIndexes(seg);
-  for (const start of starts) { const j = nextNonEmptyIndex(seg, start); const k = nextNonEmptyIndex(seg, j === -1 ? start : j);
-    if (j !== -1 && seg[j].type === 'mark' && seg[j].kind === 'tab') { const txt = (k !== -1 ? textAt(seg, k) : ''); if (txt.trim().startsWith('• Préparer la salle')) { ok3 = true; break; } } }
-  let iRDV = findTextIndex(seg, 'RDV à 14'); let ok4 = false;
-  if (iRDV !== -1) for (let i = iRDV + 1; i < seg.length - 1; i++) {
-    if (seg[i].type === 'mark' && seg[i].kind === 'nbsp') { const n = nextNonEmptyIndex(seg, i); if (n !== -1 && /^h\s*30/i.test(textAt(seg, n))) { ok4 = true; break; } }
-    if (seg[i].type === 'br') break;
-  }
-  let iMerci = findTextIndex(seg, 'Merci'); let ok5 = false;
-  if (iMerci !== -1) for (let i = iMerci + 1; i < seg.length - 1; i++) {
-    if (seg[i].type === 'mark' && seg[i].kind === 'space') { const n = nextNonEmptyIndex(seg, i); if (n !== -1 && textAt(seg, n).trim().startsWith('!')) { ok5 = true; break; } }
-    if (seg[i].type === 'br') break;
-  }
-  const okCount = [ok1, ok2, ok3, ok4, ok5].filter(Boolean).length;
-  result2.textContent = okCount===5 ? 'Parfait ! (5/5)' : `Encore ${5-okCount} à corriger… (${okCount}/5)`;
-  result2.style.color = okCount===5 ? 'var(--ok)' : 'var(--ko)';
-});
-
-// —————————————— EX 3: REPÉRER DANS UN TEXTE (corrigé : plus de doublons)
-const sample = document.getElementById('sample');
-let sampleStats = {paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
-
+// EX3
+const sample=document.getElementById('sample');
+let sampleStats={paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
 function randomSample(){
-  // Liste de variantes possibles
-  const variants = [
+  const variants=[
     "Mme°Dupont·organise·une·réunion↵RDV·à·14·h°30·→·Salle·B¶Merci·de·venir·avec·votre·PC¶",
     "RDV·à·9°h·15·→·Salle·A↵Liste·des·participants¶Merci·pour·votre·ponctualité¶",
     "Rapport·final·→·à·envoyer·avant·16°h·00↵Merci·de·relire·le·document¶",
-    "Formation·Word·→·Salle·C↵Mme°Martin·sera·présente·à·10°h·45¶Merci·d’apporter·vos·notes¶"
+    "Formation·Word·→·Salle·C↵Mme°Martin·sera·présente·à·10°h·45¶Merci·d’apporter·vos·notes¶",
+    "Le·comité·se·réunit↵Lieu·:·Salle·D¶Ordre·du·jour·envoyé·par·mail¶",
+    "Attention·:·fin·des·inscriptions↵Date·limite·:·12°h·00¶Contact·:·Mme·Durand¶",
+    "RDV·médical·à·15°h·20→Salle·101¶Merci·de·vous·présenter·à·l’accueil¶",
+    "Cours·Excel·→Salle·Informatique↵Durée·:·2·heures¶Pause·prévue·à·10°h·30¶",
+    "Assemblée·générale↵Ouverture·à·18°h·00¶Clôture·prévue·vers·20°h·30¶",
+    "Merci·de·ne·pas·oublier·vos·documents→Salle·Réunion¶Accueil·à·9°h·00¶"
   ];
-
-  // Choisir une variante au hasard
-  const chosen = variants[Math.floor(Math.random() * variants.length)];
-
-  // Réinitialiser le compteur
-  sampleStats = {paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
-  const parts = [];
-
-  // Transformer la variante en HTML avec <span class="mark">
+  const chosen=variants[Math.floor(Math.random()*variants.length)];
+  sampleStats={paragraph:0,linebreak:0,tab:0,space:0,nbsp:0};
+  const parts=[];
   for(const ch of chosen){
-    if(ch==='·'){ parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; }
-    else if(ch==='°'){ parts.push('<span class="mark nbsp" draggable="false">°</span>'); sampleStats.nbsp++; }
-    else if(ch==='→'){ parts.push('<span class="mark tab" draggable="false">→</span>'); sampleStats.tab++; }
-    else if(ch==='¶'){ parts.push('<span class="mark paragraph" draggable="false">¶</span>'); sampleStats.paragraph++; }
-    else if(ch==='↵'){ parts.push('<span class="mark linebreak" draggable="false">↵</span>'); sampleStats.linebreak++; parts.push('<br>'); }
-    else { parts.push(ch); }
+    if(ch==='·'){parts.push('<span class="mark space">·</span>');sampleStats.space++;}
+    else if(ch==='°'){parts.push('<span class="mark nbsp">°</span>');sampleStats.nbsp++;}
+    else if(ch==='→'){parts.push('<span class="mark tab">→</span>');sampleStats.tab++;}
+    else if(ch==='¶'){parts.push('<span class="mark paragraph">¶</span>');sampleStats.paragraph++;}
+    else if(ch==='↵'){parts.push('<span class="mark linebreak">↵</span>');sampleStats.linebreak++;parts.push('<br>');}
+    else{parts.push(ch);}
   }
-
-  // Insérer dans #sample
-  sample.innerHTML = parts.join('');
-  sample.querySelectorAll('.mark').forEach(m=> m.setAttribute('draggable','false'));
+  sample.innerHTML=parts.join('');
 }
-function toggleSample(){
-  const current = sample.getAttribute('data-visible') === '1';
-  const to = current? '0':'1';
-  sample.setAttribute('data-visible', to);
-  sample.querySelectorAll('.mark').forEach(m=> m.style.opacity = to==='1'? '1':'0');
-}
-document.getElementById('toggleSample').addEventListener('click', toggleSample);
-document.getElementById('regen').addEventListener('click', ()=>{
-  randomSample(); sample.setAttribute('data-visible','1');
-  sample.querySelectorAll('.mark').forEach(m=> m.style.opacity='1');
-});
-
-function checkCounts(){
-  const get = id => Number(document.getElementById(id).value || 0);
-  const ans = {paragraph:get('q_paragraph'), linebreak:get('q_linebreak'), tab:get('q_tab'), space:get('q_space'), nbsp:get('q_nbsp')};
-  let ok = 0; const total = 5;
-  ok += +(ans.paragraph===sampleStats.paragraph);
-  ok += +(ans.linebreak===sampleStats.linebreak);
-  ok += +(ans.tab===sampleStats.tab);
-  ok += +(ans.space===sampleStats.space);
-  ok += +(ans.nbsp===sampleStats.nbsp);
-  const r = document.getElementById('result3');
-  r.textContent = ok===total? `Bravo, c'est exact (${ok}/${total})` : `Certaines valeurs sont à revoir (${ok}/${total})`;
-  r.style.color = ok===total? 'var(--ok)':'var(--ko)';
-}
-document.getElementById('check3').addEventListener('click', checkCounts);
-document.getElementById('reset3').addEventListener('click', ()=>{
-  ['q_paragraph','q_linebreak','q_tab','q_space','q_nbsp'].forEach(id=> document.getElementById(id).value='');
-  document.getElementById('result3').textContent='';
-});
-
-// Init Ex.3 visible + propre
-randomSample(); sample.setAttribute('data-visible','1');
-sample.querySelectorAll('.mark').forEach(m=> m.style.opacity='1');
-
-// —————————————— Garde-fous globaux : empêcher actions sur .mark
-document.addEventListener('dragstart', (e)=>{
-  if(e.target && e.target.classList && e.target.classList.contains('mark')){ e.preventDefault(); }
-});
-document.addEventListener('click', (e)=>{
-  if(e.target && e.target.classList && e.target.classList.contains('mark')){ e.preventDefault(); }
-});
+document.getElementById('regen').onclick=()=>{randomSample();};
+randomSample();
+document.getElementById('check3').onclick=()=>{
+  const ans={
+    paragraph:+document.getElementById('q_paragraph').value||0,
+    linebreak:+document.getElementById('q_linebreak').value||0,
+    tab:+document.getElementById('q_tab').value||0,
+    space:+document.getElementById('q_space').value||0,
+    nbsp:+document.getElementById('q_nbsp').value||0
+  };
+  let ok=0; ok+=(ans.paragraph===sampleStats.paragraph);
+  ok+=(ans.linebreak===sampleStats.linebreak);
+  ok+=(ans.tab===sampleStats.tab);
+  ok+=(ans.space===sampleStats.space);
+  ok+=(ans.nbsp===sampleStats.nbsp);
+  const r=document.getElementById('result3');
+  r.textContent=ok===5?`Bravo (${ok}/5)`:`${ok}/5 correct`;
+  r.style.color=ok===5?'var(--ok)':'var(--ko)';
+};
 </script>
 </body>
 </html>
