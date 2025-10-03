@@ -461,35 +461,6 @@ function randomSample(){
   sample.innerHTML = parts.join('');
   sample.querySelectorAll('.mark').forEach(m=> m.setAttribute('draggable','false'));
 }
-
-
-  function pushText(t){
-    for(const ch of t){
-      if(ch==='·'){ parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; }
-      else if(ch==='°'){ parts.push('<span class="mark nbsp" draggable="false">°</span>'); sampleStats.nbsp++; }
-      else if(ch==='→'){ parts.push('<span class="mark tab" draggable="false">→</span>'); sampleStats.tab++; }
-      else { parts.push(ch); }
-    }
-  }
-  function addLinebreak(){ parts.push('<span class="mark linebreak" draggable="false">↵</span>'); sampleStats.linebreak++; parts.push('<br>'); }
-  function addParagraph(){ parts.push('<span class="mark paragraph" draggable="false">¶</span>'); sampleStats.paragraph++; parts.push('<br>'); }
-
-  // Ligne 1 : texte + saut de ligne
-  pushText('Mme°Dupont·organise·une·réunion'); addLinebreak();
-  // Ligne 2 : texte (inclut une tabulation dans la phrase) + paragraphe
-  pushText('RDV·à·14·h°30·→·Salle·B'); addParagraph();
-  // Ligne 3 : commence par une tabulation + un espace, puis texte, puis saut de ligne
-  pushText('→·Liste·des·points'); addLinebreak();
-  // Ligne 4 : texte + paragraphe final (pas de <br> après pour finir proprement)
-  parts.pop(); // retire le <br> ajouté par addParagraph si appelé
-  parts.push(''); // noop
-  // On ajoute la dernière ligne avec paragraphe sans <br> final :
-  parts.push('Merci'); parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; parts.push('de'); parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; parts.push('venir'); parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; parts.push('avec'); parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; parts.push('votre'); parts.push('<span class="mark space" draggable="false">·</span>'); sampleStats.space++; parts.push('PC'); parts.push('<span class="mark paragraph" draggable="false">¶</span>'); sampleStats.paragraph++;
-
-  sample.innerHTML = parts.join('');
-  sample.querySelectorAll('.mark').forEach(m=> m.setAttribute('draggable','false'));
-}
-
 function toggleSample(){
   const current = sample.getAttribute('data-visible') === '1';
   const to = current? '0':'1';
